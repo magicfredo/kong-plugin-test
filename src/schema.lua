@@ -14,5 +14,8 @@ return {
             type = "string",
             enum = ankama_apis
         },
+        jwt_rsa_private_key = {
+            type = "string"
+        }
     }
 }

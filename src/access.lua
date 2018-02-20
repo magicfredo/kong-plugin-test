@@ -1,6 +1,7 @@
 local cURL = require 'cURL'
 local json = require 'cjson'
 local jwt_decoder  = require 'kong.plugins.jwt.jwt_parser'
+--local jwt_resty = require 'resty.jwt'
 local responses = require 'kong.tools.responses'
 
 local _M = {}
@@ -104,6 +105,18 @@ function _M.execute(conf)
     print_table(cURL_response, 'CURL RESPONSE')
 
     -- CREATE JWT
+    --local jwt_token = jwt_resty:sign(jwt_private_RSA, {
+    --    header = {
+    --        typ = 'JWT',
+    --        alg = 'RS256'
+    --    },
+    --    payload = {
+    --        user = user,
+    --        company = company,
+    --        roles = roles
+    --    }
+    --})
+    --print(jwt_token)
 
     -- Ajout de l'autorisation JWT nécessaire pour appeller avatar ou esport
     ngx.req.set_header('Authorization', 'Bearer ...')
