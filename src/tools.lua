@@ -13,6 +13,9 @@ end
 -- @param table Table to print
 -- @param prefix Table to print
 function Tools:print(value, prefix)
+
+    print(type(value) .. ' - ' .. prefix)
+    
     value = type(value) == 'table' and value or {value = value}
     prefix = prefix and prefix or '';
 
