@@ -60,6 +60,9 @@ function _M.execute(conf)
 
     -- JSON Web Token
     local token, err = tools:retrieve_token(ngx.req)
+
+    tools:print(token, 'BLA BLA')
+    
     if token then
         tools:print(token, 'JWT Token')
     else
