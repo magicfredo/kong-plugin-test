@@ -1,8 +1,9 @@
-local cURL = require 'cURL'
-local json = require 'cjson'
+local cURL         = require 'cURL'
+local json         = require 'cjson'
 local jwt_decoder  = require 'kong.plugins.jwt.jwt_parser'
-local jwt = require 'resty.jwt'
-local responses = require 'kong.tools.responses'
+local jwt          = require 'resty.jwt'
+local responses    = require 'kong.tools.responses'
+local ankama_tools = require 'kong.plugins.ankama.tools'
 
 local jwt_secret_public = [[-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApCafAPfjZL7IaOm7E+Uu
@@ -97,6 +98,13 @@ function _M.execute(conf)
     else
         print('conf.authorization: FAILED')
     end
+
+    print('-------------------------------------')
+    print(ngx.var.uri);
+    print('-------------------------------------')
+
+    ankama_tools:new(conf.api_name)
+    print(ankama_tools.get_api_name());
 
     -- JWT plugin
     local token, err = retrieve_token(ngx.req)

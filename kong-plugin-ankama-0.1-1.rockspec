@@ -22,5 +22,6 @@ build = {
     ["kong.plugins.ankama.access"] = "src/access.lua",
     ["kong.plugins.ankama.handler"] = "src/handler.lua",
     ["kong.plugins.ankama.schema"] = "src/schema.lua"
+    ["kong.plugins.ankama.tools"] = "src/tools.lua"
   }
 }

@@ -1,4 +1,4 @@
-local ankama_apis = {
+local ANKAMA_APIS = {
   "avatar",
   "dofus-esport",
 }
@@ -10,9 +10,10 @@ return {
             type = "boolean",
             default = true
         },
-        ankama_api = {
+        api_name = {
             type = "string",
-            enum = ankama_apis
+            required = true,
+            enum = ANKAMA_APIS
         },
         jwt_rsa_private_key = {
             type = "string"
