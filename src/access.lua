@@ -99,12 +99,14 @@ function _M.execute(conf)
         print('conf.authorization: FAILED')
     end
 
-    print('-------------------------------------')
-    print(ngx.var.uri);
-    print('-------------------------------------')
+    ankama_tools:new('')
 
-    ankama_tools:new(conf.api_name)
-    print(ankama_tools.get_api_name());
+    ankama_tools:print('-------------------------------------')
+    ankama_tools:print(ngx.var.uri, 'Prefix 1');
+    ankama_tools:print(ngx.var, 'Prefix 2');
+    ankama_tools:print('-------------------------------------')
+
+    print(ankama_tools:get_api_name());
 
     -- JWT plugin
     local token, err = retrieve_token(ngx.req)
