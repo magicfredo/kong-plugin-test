@@ -24,7 +24,7 @@ function Tools:print(expression, prefix)
         elseif type(value) == 'boolean' then
             print(prefix .. ': ' .. key .. ': ' .. (value and 'TRUE' or 'FALSE'))
         elseif type(value) == 'table' then
-            print_table(value, prefix .. ' >> ' .. key)
+            self:print(value, prefix .. ' >> ' .. key)
         else
             print(prefix .. ': ' .. key .. ': type: ' .. type(value))
         end
