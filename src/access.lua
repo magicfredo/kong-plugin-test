@@ -100,17 +100,7 @@ function _M.execute(conf)
     end
 
     ankama_tools:new('')
-
-    ankama_tools:print('-------------------------------------')
-    ankama_tools:print(ngx.var.uri, 'Prefix 1');
-    ankama_tools:print(ngx.var, 'Prefix 2');
-    ankama_tools:print('-******------------------------------------')
-
-    print_table(ngx.var, 'Prefix 3');
-
-    ankama_tools:print('-*******-----------------------------------')
-
-    print(ankama_tools:get_api_name());
+    print(ankama_tools:getApiName());
 
     -- JWT plugin
     local token, err = retrieve_token(ngx.req)
