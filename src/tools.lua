@@ -14,10 +14,9 @@ end
 -- @param prefix Table to print
 function Tools:print(value, prefix)
 
+    prefix = prefix and prefix or 'Tools:print';
     print(type(value) .. ' - ' .. prefix)
-    
     value = type(value) == 'table' and value or {value = value}
-    prefix = prefix and prefix or '';
 
     for key, value in pairs(value) do
         if type(value) == 'string' then
