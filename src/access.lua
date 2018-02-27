@@ -47,24 +47,6 @@ local token_ankama_ms = [[COPY_AND_PASTE]]
 
 local _M = {}
 
--- @param table Table to print
--- @param prefix Table to print
-local function print_table(table, prefix)
-    prefix = prefix and prefix or '';
-
-    for key, value in pairs(table) do
-        if type(value) == 'string' then
-            print(prefix .. ': ' .. key .. ': ' .. value)
-        elseif type(value) == 'boolean' then
-            print(prefix .. ': ' .. key .. ': ' .. (value and 'TRUE' or 'FALSE'))
-        elseif type(value) == 'table' then
-            print_table(value, prefix .. ' >> ' .. key)
-        else
-            print(prefix .. ': ' .. key .. ': type: ' .. type(value))
-        end
-    end
-end
-
 -- Retrieve a JWT in a request.
 -- Checks for the JWT in URI parameters, then in cookies, and finally
 -- in the `Authorization` header.
@@ -103,7 +85,7 @@ function _M.execute(conf)
     print(ankama_tools:getApiName());
 
     -- JWT plugin
-    local token, err = retrieve_token(ngx.req)
+    local token, err = ankama_tools:retrieveToken(ngx.req)
     if err then
         responses.send_HTTP_INTERNAL_SERVER_ERROR(err)
     end
