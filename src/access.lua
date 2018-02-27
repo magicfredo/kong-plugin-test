@@ -3,7 +3,7 @@ local json         = require 'cjson'
 local jwt_decoder  = require 'kong.plugins.jwt.jwt_parser'
 local jwt          = require 'resty.jwt'
 local responses    = require 'kong.tools.responses'
-local ankama_tools = require 'kong.plugins.ankama.tools'
+local tools        = require 'kong.plugins.ankama.tools'
 
 local jwt_secret_public = [[-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApCafAPfjZL7IaOm7E+Uu
@@ -47,31 +47,6 @@ local token_ankama_ms = [[COPY_AND_PASTE]]
 
 local _M = {}
 
--- Retrieve a JWT in a request.
--- Checks for the JWT in URI parameters, then in cookies, and finally
--- in the `Authorization` header.
--- @param request ngx request object
--- @return token JWT token contained in request (can be a table) or nil
--- @return err
-local function retrieve_token(request)
-    local authorization_header = request.get_headers()['authorization']
-    if authorization_header then
-        local iterator, iter_err = ngx.re.gmatch(authorization_header, "\\s*[Bb]earer\\s+(.+)")
-        if not iterator then
-            return nil, iter_err
-        end
-
-        local m, err = iterator()
-        if err then
-            return nil, err
-        end
-
-        if m and #m > 0 then
-            return m[1]
-        end
-    end
-end
-
 function _M.execute(conf)
 
     -- Simulation de l'autorisation via la configuration
@@ -81,38 +56,50 @@ function _M.execute(conf)
         print('conf.authorization: FAILED')
     end
 
-    ankama_tools:new('')
-    print(ankama_tools:getApiName());
+    tools:new(conf.api_name)
 
-    -- JWT plugin
-    local token, err = ankama_tools:retrieveToken(ngx.req)
-    if err then
-        responses.send_HTTP_INTERNAL_SERVER_ERROR(err)
+    -- JSON Web Token
+    local token, err = tools:retrieve_token(ngx.req)
+    if token then
+        tools:print(token, 'JWT Token')
+    else
+        -- Basic Authorization
+        local given_username, given_password = tools:retrieve_credentials(ngx.req)
+        if given_username then
+            tools:print({
+                given_username,
+                given_password
+            }, 'Basic Authorization')
+        else
+            responses.send_HTTP_INTERNAL_SERVER_ERROR(err)
+        end
     end
 
-    local jwt_obj, jwt_error = nil, nil
-    local user, company, roles = nil, nil, nil
+    if token then
+        local jwt_obj, jwt_error = nil, nil
+        local user, company, roles = nil, nil, nil
 
-    -- Version 1 - resty jwt
-    jwt_obj = jwt:verify(jwt_secret_public, token)
+        -- Version 1 - resty jwt
+        jwt_obj = jwt:verify(jwt_secret_public, token)
 
-    user = jwt_obj.payload.user and jwt_obj.payload.user or nil
-    company = jwt_obj.payload.company and jwt_obj.payload.company or nil
-    roles = jwt_obj.payload.roles and jwt_obj.payload.roles or nil
+        user = jwt_obj.payload.user and jwt_obj.payload.user or nil
+        company = jwt_obj.payload.company and jwt_obj.payload.company or nil
+        roles = jwt_obj.payload.roles and jwt_obj.payload.roles or nil
 
-    ngx.header['X-Ankama-User-1'] = user .. ' (company: ' .. company .. ', roles: ' .. roles .. ')'
+        ngx.header['X-Ankama-User-1'] = user .. ' (company: ' .. company .. ', roles: ' .. roles .. ')'
 
-    -- Version 2 - jwt kong plugin
-    jwt_obj, jwt_error = jwt_decoder:new(token)
-    if err then
-        responses.send_HTTP_INTERNAL_SERVER_ERROR(err)
+        -- Version 2 - jwt kong plugin
+        jwt_obj, jwt_error = jwt_decoder:new(token)
+        if err then
+            responses.send_HTTP_INTERNAL_SERVER_ERROR(err)
+        end
+
+        user = jwt_obj.claims.user and jwt_obj.claims.user or nil
+        company = jwt_obj.claims.company and jwt_obj.claims.company or nil
+        roles = jwt_obj.claims.roles and jwt_obj.claims.roles or nil
+
+        ngx.header['X-Ankama-User-2'] = user .. ' (company: ' .. company .. ', roles: ' .. roles .. ')'
     end
-
-    user = jwt_obj.claims.user and jwt_obj.claims.user or nil
-    company = jwt_obj.claims.company and jwt_obj.claims.company or nil
-    roles = jwt_obj.claims.roles and jwt_obj.claims.roles or nil
-
-    ngx.header['X-Ankama-User-2'] = user .. ' (company: ' .. company .. ', roles: ' .. roles .. ')'
 
     -- Curl request to user authorization
     local cURL_response = ''
@@ -141,7 +128,7 @@ function _M.execute(conf)
     end
 
     cURL_response = json.decode(cURL_response);
-    ankama_tools:print(cURL_response, 'CURL RESPONSE')
+    tools:print(cURL_response, 'CURL RESPONSE')
 
     -- CREATE JWT
     local jwt_token = jwt:sign(jwt_secret_private, {

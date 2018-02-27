@@ -1,12 +1,12 @@
-local Object = require "kong.vendor.classic";
-local Tools = Object:extend();
+local Object = require "kong.vendor.classic"
+local Tools = Object:extend()
 
 function Tools:new(apiName)
-    self.apiName = apiName;
+    self.apiName = apiName
 end
 
-function Tools:getApiName()
-    return self.apiName;
+function Tools:get_api_name()
+    return self.apiName
 end
 
 --- Print
@@ -14,8 +14,8 @@ end
 -- @param prefix Table to print
 function Tools:print(expression, prefix)
 
-    prefix = prefix and prefix or 'Tools:print';
-    expression = type(expression) == 'table' and expression or {expression = expression};
+    prefix = prefix and prefix or 'Tools:print'
+    expression = type(expression) == 'table' and expression or {expression = expression}
 
     for key, value in pairs(expression) do
         if type(value) == 'string' then
@@ -30,8 +30,15 @@ function Tools:print(expression, prefix)
     end
 end
 
-function Tools:retrieveToken(request)
+--- Retrieve a JWT in a request.
+-- @param request ngx request object
+-- @param conf Plugin configuration
+-- @return token JWT token contained in request (can be a table) or nil
+-- @return err
+function Tools:retrieve_token(request)
+
     local authorization_header = request.get_headers()['authorization']
+
     if authorization_header then
         local iterator, iter_err = ngx.re.gmatch(authorization_header, "\\s*[Bb]earer\\s+(.+)")
         if not iterator then
@@ -47,6 +54,47 @@ function Tools:retrieveToken(request)
             return m[1]
         end
     end
+end
+
+--- Fast lookup for credential retrieval depending on the type of the authentication
+-- @param request ngx request object
+-- @return {string} public_key
+-- @return {string} private_key
+function Tools:retrieve_credentials(request)
+
+    local username, password
+    local authorization_header = request.get_headers()['authorization']
+
+    if authorization_header then
+        local iterator, iter_err = ngx.re.gmatch(authorization_header, "\\s*[Bb]asic\\s*(.+)")
+        if not iterator then
+            return nil, iter_err
+        end
+
+        local m, err = iterator()
+        if err then
+            return nil, err
+        end
+
+        if m and m[1] then
+            local decoded_basic = ngx.decode_base64(m[1])
+            if decoded_basic then
+                local basic_parts, err = ngx.re.match(decoded_basic, "([^:]+):(.+)", "oj")
+                if err then
+                    return nil
+                end
+
+                if not basic_parts then
+                    return nil
+                end
+
+                username = basic_parts[1]
+                password = basic_parts[2]
+            end
+        end
+    end
+
+    return username, password
 end
 
 return Tools
