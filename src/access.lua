@@ -159,7 +159,7 @@ function _M.execute(conf)
     end
 
     cURL_response = json.decode(cURL_response);
-    print_table(cURL_response, 'CURL RESPONSE')
+    ankama_tools:print(cURL_response, 'CURL RESPONSE')
 
     -- CREATE JWT
     local jwt_token = jwt:sign(jwt_secret_private, {
