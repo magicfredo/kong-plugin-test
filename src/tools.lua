@@ -10,15 +10,15 @@ function Tools:getApiName()
 end
 
 --- Print
--- @param table Table to print
+-- @param expression Table to print
 -- @param prefix Table to print
-function Tools:print(value, prefix)
+function Tools:print(expression, prefix)
 
     prefix = prefix and prefix or 'Tools:print';
-    print(type(value) .. ' - ' .. prefix)
-    value = type(value) == 'table' and value or {value = value}
+    print(type(expression) .. ' - ' .. prefix)
+    expression = type(expression) == 'table' and expression or {expression = expression}
 
-    for key, value in pairs(value) do
+    for key, value in pairs(expression) do
         if type(value) == 'string' then
             print(prefix .. ': ' .. key .. ': ' .. value)
         elseif type(value) == 'boolean' then
