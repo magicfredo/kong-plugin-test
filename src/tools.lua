@@ -12,7 +12,7 @@ end
 
 function Tools:get_api_name()
 
-    local iterator, iter_err = ngx.re.gmatch(ngx.var.uri, "/(.*)/(.+)")
+    local iterator, iter_err = ngx.re.match(ngx.var.uri, "/(.*)/(.+)")
     if not iterator then
         self:print(iter_err, 'GMATCH')
         return nil, iter_err
