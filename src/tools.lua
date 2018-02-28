@@ -20,6 +20,7 @@ end
 function Tools:print(expression, prefix)
 
     if not prefix then
+        print('Coucou je passe ici')
         prefix = 'Tools:print'
     end
 
