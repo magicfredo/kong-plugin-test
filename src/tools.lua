@@ -19,13 +19,11 @@ end
 -- @param prefix Table to print
 function Tools:print(expression, prefix)
 
-    print('>> >> >> >> >> >> >> BEGIN << << << << << << << <<')
-    print(prefix)
     prefix = prefix and prefix or 'Tools:print'
-    print(prefix)
-    expression = type(expression) == 'table' and expression or {['expression'] = expression}
-    print(expression)
-    print('>> >> >> >> >> >> >> END << << << << << << << <<')
+    if type(expression) == 'string' then
+        print ('>>>>>>>>>><' .. expression)
+        expression = {expression}
+    end
 
     for key, value in pairs(expression) do
         if type(value) == 'string' or type(value) == 'expression' then
