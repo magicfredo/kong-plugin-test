@@ -58,10 +58,6 @@ function _M.execute(conf)
 
     local authorization_type;
 
-
-    ak_tools:print('azerty', 'PREFIX 1')
-    ak_tools:print({'azerty', 'qwerty'}, 'PREFIX 2')
-
     -- JSON Web Token
     local token, err = ak_tools:retrieve_token(ngx.req)
     if token then
@@ -88,10 +84,7 @@ function _M.execute(conf)
         -- Version 1 - resty jwt
         jwt_obj = jwt:verify(conf.jwt_secret_public, token)
         print('---------------------------------------------')
-        ak_tools.print('toto', 'TEST_1')
-        ak_tools.print(conf.jwt_secret_public, 'TEST_2')
-        print(conf.jwt_secret_public)
-        print(type(conf.jwt_secret_public))
+        ak_tools:print(conf.jwt_secret_public, 'conf.jwt_secret_public')
         print('---------------------------------------------')
 
         user = jwt_obj.payload.user and jwt_obj.payload.user or nil

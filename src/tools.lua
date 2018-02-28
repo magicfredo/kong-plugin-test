@@ -15,22 +15,15 @@ function Tools:get_api_name()
 end
 
 --- Print
---- @ param expression Table to print
---- @ param prefix Table to print
+-- @param expression Table to print
+-- @param prefix Prefix
 function Tools:print(expression, prefix)
 
-    if not prefix then
-        print('Coucou je passe ici')
-        prefix = 'Tools:print'
-    end
-
-    if type(expression) == 'string' then
-        print ('>>>>>>>>>><<' .. expression)
-        expression = {expression}
-    end
+    prefix = prefix and prefix or 'Tools:print'
+    expression = type(expression) == 'table' and expression or {['expression'] = expression}
 
     for key, value in pairs(expression) do
-        if type(value) == 'string' then
+        if type(value) == 'string' or type(value) == 'expression' then
             print(prefix .. ': ' .. key .. ': ' .. value)
         elseif type(value) == 'boolean' then
             print(prefix .. ': ' .. key .. ': ' .. (value and 'TRUE' or 'FALSE'))
