@@ -19,14 +19,17 @@ end
 --- @ param prefix Table to print
 function Tools:print(expression, prefix)
 
-    prefix = prefix and prefix or 'Tools:print'
+    if not prefix then
+        prefix = 'Tools:print'
+    end
+
     if type(expression) == 'string' then
-        print ('>>>>>>>>>><' .. expression)
+        print ('>>>>>>>>>><<' .. expression)
         expression = {expression}
     end
 
     for key, value in pairs(expression) do
-        if type(value) == 'string' or type(value) == 'expression' then
+        if type(value) == 'string' then
             print(prefix .. ': ' .. key .. ': ' .. value)
         elseif type(value) == 'boolean' then
             print(prefix .. ': ' .. key .. ': ' .. (value and 'TRUE' or 'FALSE'))
