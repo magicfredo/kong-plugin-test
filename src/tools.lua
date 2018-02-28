@@ -15,8 +15,8 @@ function Tools:get_api_name()
 end
 
 --- Print
--- @param expression Table to print
--- @param prefix Table to print
+--- @ param expression Table to print
+--- @ param prefix Table to print
 function Tools:print(expression, prefix)
 
     prefix = prefix and prefix or 'Tools:print'
