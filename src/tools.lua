@@ -20,7 +20,7 @@ end
 function Tools:print(expression, prefix)
 
     prefix = prefix and prefix or 'Tools:print'
-    expression = type(expression) == 'table' and expression or {expression = [[expression]]}
+    expression = type(expression) == 'table' and expression or {expression = expression}
 
     for key, value in pairs(expression) do
         if type(value) == 'string' then
