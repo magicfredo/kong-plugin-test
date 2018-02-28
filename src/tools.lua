@@ -6,31 +6,29 @@ Tools.AUTHORIZATION_TYPES = {
     JWT = 'JSON Web Token'
 }
 
-function Tools:new(apiName)
-    self.apiName = apiName
+function Tools:new(api_name)
+    self.api_name = api_name
 end
 
 function Tools:get_api_name()
+    if not self.api_name then
+        local m, err = ngx.re.match(ngx.var.uri, '\\/([^\\/]*)\\/(.*)')
+        if err then
+            return nil, err
+        end
 
-    local m, err = ngx.re.match(ngx.var.uri, '\\/([^\\/]*)\\/(.*)')
-    if err then
-        return nil, err
+        if m and #m > 0 then
+            self.api_name = m[1]
+        end
     end
 
-    self:print(m, 'GMATCH')
-
-    if m and #m > 0 then
-        return m[1]
-    end
-
-    -- return self.apiName
+    return self.api_name, nil
 end
 
 --- Print
 -- @param expression Table to print
 -- @param prefix Prefix
 function Tools:print(expression, prefix)
-
     prefix = prefix and prefix or 'Tools:print'
     expression = type(expression) == 'table' and expression or {['NO_KEY'] = expression}
 
@@ -53,7 +51,6 @@ end
 -- @return token JWT token contained in request (can be a table) or nil
 -- @return err
 function Tools:retrieve_token(request)
-
     local authorization_header = request.get_headers()['authorization']
 
     if authorization_header then
@@ -78,7 +75,6 @@ end
 -- @return {string} public_key
 -- @return {string} private_key
 function Tools:retrieve_credentials(request)
-
     local username, password
     local authorization_header = request.get_headers()['authorization']
 
