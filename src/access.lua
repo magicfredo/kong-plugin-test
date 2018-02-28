@@ -5,16 +5,6 @@ local jwt          = require 'resty.jwt'
 local responses    = require 'kong.tools.responses'
 local ak_tools        = require 'kong.plugins.ankama.tools'
 
-local jwt_secret_public = [[-----BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApCafAPfjZL7IaOm7E+Uu
-AiT4YmmNJx2UC9amggGcCXyOcZUCloZlfjl1PFtmvorDdNWwvtl239EBuEPFJ3uy
-xmabFOFHAI3TzDEIxmDRbF89ZgwpKlCNN+fy05+FFJ/ee7guh8hNOaFGjhoWO3Cd
-B40oAMYb4ThjLdo9c0HARBxXVEHe0V2o/Zh7lysMdZzThhghMLG4O4poDkPR7nNc
-RRsHchqvH9PyQsYRgEj/q2QG607Zkd98cZO6aAHwBZ23YyC4+Xf1M6ahcmkagmfs
-a4qerjKT5t1tGbmg+ap7ukdaT/F/6AzyS3+gMacgHBmyC9gK8HfPWlZg9fLBdOX4
-3wIDAQAB
------END PUBLIC KEY-----]]
-
 local jwt_secret_private = [[-----BEGIN RSA PRIVATE KEY-----
 MIIEogIBAAKCAQEApCafAPfjZL7IaOm7E+UuAiT4YmmNJx2UC9amggGcCXyOcZUC
 loZlfjl1PFtmvorDdNWwvtl239EBuEPFJ3uyxmabFOFHAI3TzDEIxmDRbF89Zgwp
@@ -55,6 +45,7 @@ local _M = {}
 function _M.execute(conf)
 
     ak_tools:new(conf.api_name)
+    ak_tools:get_api_name()
 
     local authorization_type;
 
@@ -83,27 +74,24 @@ function _M.execute(conf)
 
         -- Version 1 - resty jwt
         jwt_obj = jwt:verify(conf.jwt_secret_public, token)
-        print('---------------------------------------------')
-        ak_tools:print(conf.jwt_secret_public, 'conf.jwt_secret_public')
-        print('---------------------------------------------')
 
         user = jwt_obj.payload.user and jwt_obj.payload.user or nil
         company = jwt_obj.payload.company and jwt_obj.payload.company or nil
         roles = jwt_obj.payload.roles and jwt_obj.payload.roles or nil
 
-        ngx.header['X-Ankama-User-1'] = user .. ' (company: ' .. company .. ', roles: ' .. roles .. ')'
+        ngx.header['X-Ankama-User'] = user .. ' (company: ' .. company .. ', roles: ' .. roles .. ')'
 
-        -- Version 2 - jwt kong plugin
-        jwt_obj, jwt_error = jwt_decoder:new(token)
-        if err then
-            responses.send_HTTP_INTERNAL_SERVER_ERROR(err)
-        end
-
-        user = jwt_obj.claims.user and jwt_obj.claims.user or nil
-        company = jwt_obj.claims.company and jwt_obj.claims.company or nil
-        roles = jwt_obj.claims.roles and jwt_obj.claims.roles or nil
-
-        ngx.header['X-Ankama-User-2'] = user .. ' (company: ' .. company .. ', roles: ' .. roles .. ')'
+        ---- Version 2 - jwt kong plugin
+        --jwt_obj, jwt_error = jwt_decoder:new(token)
+        --if err then
+        --    responses.send_HTTP_INTERNAL_SERVER_ERROR(err)
+        --end
+        --
+        --user = jwt_obj.claims.user and jwt_obj.claims.user or nil
+        --company = jwt_obj.claims.company and jwt_obj.claims.company or nil
+        --roles = jwt_obj.claims.roles and jwt_obj.claims.roles or nil
+        --
+        --ngx.header['X-Ankama-User-2'] = user .. ' (company: ' .. company .. ', roles: ' .. roles .. ')'
     end
 
     -- Curl request to user authorization

@@ -11,7 +11,24 @@ function Tools:new(apiName)
 end
 
 function Tools:get_api_name()
-    return self.apiName
+
+    local iterator, iter_err = ngx.re.gmatch(ngx.var.uri, "/(.*)/(.+)")
+    if not iterator then
+        return nil, iter_err
+    end
+
+    local m, err = iterator()
+    if err then
+        return nil, err
+    end
+
+    self:print(m, 'GMATCH')
+
+    if m and #m > 0 then
+        return m[1]
+    end
+
+    -- return self.apiName
 end
 
 --- Print
@@ -101,9 +118,5 @@ function Tools:retrieve_credentials(request)
 
     return username, password
 end
-
---function Tools:format_information()
---
---end
 
 return Tools
