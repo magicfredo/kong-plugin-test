@@ -58,6 +58,10 @@ function _M.execute(conf)
 
     local authorization_type;
 
+
+    ak_tools:print('azerty', 'PREFIX 1')
+    ak_tools:print({'azerty', 'qwerty'}, 'PREFIX 2')
+
     -- JSON Web Token
     local token, err = ak_tools:retrieve_token(ngx.req)
     if token then
