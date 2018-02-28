@@ -82,7 +82,7 @@ function _M.execute(conf)
         local user, company, roles = nil, nil, nil
 
         -- Version 1 - resty jwt
-        jwt_obj = jwt:verify(jwt_secret_public, token)
+        jwt_obj = jwt:verify(conf.jwt_secret_public, token)
 
         user = jwt_obj.payload.user and jwt_obj.payload.user or nil
         company = jwt_obj.payload.company and jwt_obj.payload.company or nil
