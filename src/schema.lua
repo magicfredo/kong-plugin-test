@@ -11,10 +11,10 @@ return {
             required = true,
             enum = ANKAMA_APIS
         },
-        jwt_public_key = {
+        jwt_secret_public = {
             type = "string"
         },
-        jwt_private_key = {
+        jwt_secret_private = {
             type = "string"
         }
     }
