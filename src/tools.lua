@@ -1,6 +1,11 @@
 local Object = require "kong.vendor.classic"
 local Tools = Object:extend()
 
+Tools.AUTHORIZATION_TYPES = {
+    BASIC = 'Basic Authorization',
+    JWT = 'JSON Web Token'
+}
+
 function Tools:new(apiName)
     self.apiName = apiName
 end
@@ -81,11 +86,11 @@ function Tools:retrieve_credentials(request)
             if decoded_basic then
                 local basic_parts, err = ngx.re.match(decoded_basic, "([^:]+):(.+)", "oj")
                 if err then
-                    return nil
+                    return nil, err
                 end
 
                 if not basic_parts then
-                    return nil
+                    return nil, '[basic-auth] header has unrecognized format'
                 end
 
                 username = basic_parts[1]
@@ -96,5 +101,9 @@ function Tools:retrieve_credentials(request)
 
     return username, password
 end
+
+--function Tools:format_information()
+--
+--end
 
 return Tools

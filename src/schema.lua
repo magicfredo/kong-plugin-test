@@ -6,16 +6,15 @@ local ANKAMA_APIS = {
 return {
     no_consumer = true,
     fields = {
-        authorization = {
-            type = "boolean",
-            default = true
-        },
         api_name = {
             type = "string",
             required = true,
             enum = ANKAMA_APIS
         },
-        jwt_rsa_private_key = {
+        jwt_public_key = {
+            type = "string"
+        },
+        jwt_private_key = {
             type = "string"
         }
     }

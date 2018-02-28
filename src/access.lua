@@ -2,8 +2,8 @@ local cURL         = require 'cURL'
 local json         = require 'cjson'
 local jwt_decoder  = require 'kong.plugins.jwt.jwt_parser'
 local jwt          = require 'resty.jwt'
-local responses    = require 'kong.tools.responses'
-local tools        = require 'kong.plugins.ankama.tools'
+local responses    = require 'kong.ak_tools.responses'
+local ak_tools        = require 'kong.plugins.ankama.tools'
 
 local jwt_secret_public = [[-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApCafAPfjZL7IaOm7E+Uu
@@ -45,31 +45,30 @@ jgJsOwJ1/6bTKyknvYLIH8MJhGo8A+sj1FvF5WoemAoEjDOkDnw=
 
 local token_ankama_ms = [[COPY_AND_PASTE]]
 
+local AUTHORIZATION_TYPES = {
+    BASIC = 'Basic Authorization',
+    JWT = 'JSON Web Token'
+}
+
 local _M = {}
 
 function _M.execute(conf)
 
-    -- Simulation de l'autorisation via la configuration
-    if conf.authorization then
-        print('conf.authorization: SUCCESS')
-    else
-        print('conf.authorization: FAILED')
-    end
+    ak_tools:new(conf.api_name)
 
-    tools:new(conf.api_name)
+    local authorization_type;
 
     -- JSON Web Token
-    local token, err = tools:retrieve_token(ngx.req)
-
-    tools:print(token, 'BLA BLA')
-    
+    local token, err = ak_tools:retrieve_token(ngx.req)
     if token then
-        tools:print(token, 'JWT Token')
+        authorization_type = AUTHORIZATION_TYPES.JWT
+        ak_tools:print(token, 'JWT Token')
     else
         -- Basic Authorization
-        local given_username, given_password = tools:retrieve_credentials(ngx.req)
+        local given_username, given_password = ak_tools:retrieve_credentials(ngx.req)
         if given_username then
-            tools:print({
+            authorization_type = AUTHORIZATION_TYPES.BASIC
+            ak_tools:print({
                 given_username,
                 given_password
             }, 'Basic Authorization')
@@ -78,7 +77,7 @@ function _M.execute(conf)
         end
     end
 
-    if token then
+    if authorization_type == AUTHORIZATION_TYPES.JWT then
         local jwt_obj, jwt_error = nil, nil
         local user, company, roles = nil, nil, nil
 
@@ -131,7 +130,7 @@ function _M.execute(conf)
     end
 
     cURL_response = json.decode(cURL_response);
-    tools:print(cURL_response, 'CURL RESPONSE')
+    ak_tools:print(cURL_response, 'CURL RESPONSE')
 
     -- CREATE JWT
     local jwt_token = jwt:sign(jwt_secret_private, {
