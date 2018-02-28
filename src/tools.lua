@@ -20,12 +20,11 @@ end
 function Tools:print(expression, prefix)
 
     print('>> >> >> >> >> >> >> BEGIN << << << << << << << <<')
-    print(prefix);
+    print(prefix)
     prefix = prefix and prefix or 'Tools:print'
-    print(prefix);
-    print(expression);
+    print(prefix)
     expression = type(expression) == 'table' and expression or {['expression'] = expression}
-    print(expression);
+    print(expression)
     print('>> >> >> >> >> >> >> END << << << << << << << <<')
 
     for key, value in pairs(expression) do
