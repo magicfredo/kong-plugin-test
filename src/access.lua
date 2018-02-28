@@ -85,6 +85,7 @@ function _M.execute(conf)
         jwt_obj = jwt:verify(conf.jwt_secret_public, token)
         print('---------------------------------------------')
         print(conf.jwt_secret_public)
+        print(type(conf.jwt_secret_public))
         print('---------------------------------------------')
 
         user = jwt_obj.payload.user and jwt_obj.payload.user or nil

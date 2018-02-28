@@ -23,7 +23,7 @@ function Tools:print(expression, prefix)
     expression = type(expression) == 'table' and expression or {expression = expression}
 
     for key, value in pairs(expression) do
-        if type(value) == 'string' then
+        if type(value) == 'string' or type(value) == 'expression' then
             print(prefix .. ': ' .. key .. ': ' .. value)
         elseif type(value) == 'boolean' then
             print(prefix .. ': ' .. key .. ': ' .. (value and 'TRUE' or 'FALSE'))
