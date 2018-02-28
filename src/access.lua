@@ -83,6 +83,7 @@ function _M.execute(conf)
 
         -- Version 1 - resty jwt
         jwt_obj = jwt:verify(conf.jwt_secret_public, token)
+        ak_tools.print(conf.jwt_secret_public, 'conf.jwt_secret_public')
 
         user = jwt_obj.payload.user and jwt_obj.payload.user or nil
         company = jwt_obj.payload.company and jwt_obj.payload.company or nil
