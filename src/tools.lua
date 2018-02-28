@@ -20,11 +20,11 @@ end
 function Tools:print(expression, prefix)
 
     prefix = prefix and prefix or 'Tools:print'
-    expression = type(expression) == 'table' and expression or {['expression'] = expression}
+    expression = type(expression) == 'table' and expression or {expression}
 
     for key, value in pairs(expression) do
-        if type(value) == 'string' or type(value) == 'expression' then
-            print(prefix .. ': ' .. key .. ': ' .. value)
+        if type(value) == 'string' then
+            print(prefix .. ': ' .. (key ~= 0 and key .. ': ' or '') .. ': ' .. value)
         elseif type(value) == 'boolean' then
             print(prefix .. ': ' .. key .. ': ' .. (value and 'TRUE' or 'FALSE'))
         elseif type(value) == 'table' then
