@@ -12,7 +12,7 @@ end
 
 function Tools:get_api_name()
 
-    local m, err = ngx.re.match(ngx.var.uri, "\/([^\/]*)\/(.*)")
+    local m, err = ngx.re.match(ngx.var.uri, '\\/([^\\/]*)\\/(.*)')
     if err then
         return nil, err
     end
