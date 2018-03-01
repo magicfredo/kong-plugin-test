@@ -12,9 +12,6 @@ end
 
 function Tools:get_api_name()
     if not self.api_name then
-
-        print('GETTTTTTTTTTTTTTT')
-
         local m, err = ngx.re.match(ngx.var.uri, '\\/([^\\/]*)\\/(.*)')
         if err then
             return nil, err

@@ -1,6 +1,6 @@
 local cURL         = require 'cURL'
 local json         = require 'cjson'
-local jwt_decoder  = require 'kong.plugins.jwt.jwt_parser'
+-- local jwt_decoder  = require 'kong.plugins.jwt.jwt_parser'
 local jwt          = require 'resty.jwt'
 local responses    = require 'kong.tools.responses'
 local ak_tools        = require 'kong.plugins.ankama.tools'
