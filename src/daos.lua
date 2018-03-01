@@ -10,4 +10,4 @@ local SCHEMA = {
   },
 }
 
-return {ankama_credentials = SCHEMA}
+return {tbl_ankama = SCHEMA}
