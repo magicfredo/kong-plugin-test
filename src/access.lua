@@ -1,9 +1,10 @@
+local ak_tools     = require 'kong.plugins.ankama.tools'
 local cURL         = require 'cURL'
 local json         = require 'cjson'
 -- local jwt_decoder  = require 'kong.plugins.jwt.jwt_parser'
 local jwt          = require 'resty.jwt'
 local responses    = require 'kong.tools.responses'
-local ak_tools        = require 'kong.plugins.ankama.tools'
+local singletons   = require "kong.singletons"
 
 local jwt_secret_private = [[-----BEGIN RSA PRIVATE KEY-----
 MIIEogIBAAKCAQEApCafAPfjZL7IaOm7E+UuAiT4YmmNJx2UC9amggGcCXyOcZUC
@@ -46,6 +47,14 @@ function _M.execute(conf)
 
     ak_tools:new() -- conf.api_name
     ngx.header['X-Ankama-Api-Name'] = ak_tools:get_api_name()
+
+    local token, err = singletons.dao.tbl_ankama:insert({
+        username = 'magicfredo'
+    }, {ttl = 300})
+
+    ak_tools:print(err)
+    ak_tools:print(token)
+
 
     local authorization_type;
 
