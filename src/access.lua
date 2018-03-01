@@ -44,9 +44,8 @@ local _M = {}
 
 function _M.execute(conf)
 
-    ak_tools:new()
-    ak_tools:print(ak_tools:get_api_name())
-    ak_tools:print(ak_tools:get_api_name())
+    ak_tools:new() -- conf.api_name
+    ngx.header['X-Ankama-Api-Name'] = ak_tools:get_api_name()
 
     local authorization_type;
 
