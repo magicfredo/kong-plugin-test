@@ -66,7 +66,7 @@ function _M.execute(conf)
     ak_tools:print(err_find, 'FIND_ERR')
 
     local result_find2, err_find2 = singletons.dao.tbl_ankama:find({
-        consumer_id = '0c9d0a88-0e58-446a-b062-50082167de86'
+        id = '599645c6-3a57-410c-a247-ce0071aa4fc3'
     })
 
     ak_tools:print(result_find2, 'FIND_RESULT_2')
