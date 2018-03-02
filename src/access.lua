@@ -48,7 +48,7 @@ function _M.execute(conf)
     ak_tools:new() -- conf.api_name
     ngx.header['X-Ankama-Api-Name'] = ak_tools:get_api_name()
 
-    local apikey = request.get_uri_args().apikey;
+    local apikey = ngx.req.get_uri_args().apikey;
     ak_tools:print(apikey, 'apikey')
 
     local result_set, err = singletons.dao.tbl_ankama:insert({
