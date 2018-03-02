@@ -48,13 +48,16 @@ function _M.execute(conf)
     ak_tools:new() -- conf.api_name
     ngx.header['X-Ankama-Api-Name'] = ak_tools:get_api_name()
 
-    local token, err = singletons.dao.tbl_ankama:insert({
+    local apikey = request.get_uri_args().apikey;
+    ak_tools:print(apikey, 'apikey')
+
+    local result_set, err = singletons.dao.tbl_ankama:insert({
         username = 'magicfredo',
         consumer_id = '0c9d0a88-0e58-446a-b062-50082167de86'
     }, {ttl = 300})
 
     ak_tools:print(err, 'CASSANDRA ERR')
-    ak_tools:print(token, 'CASSANDRA RESULT')
+    ak_tools:print(result_set, 'CASSANDRA RESULT')
 
 
     local authorization_type;
