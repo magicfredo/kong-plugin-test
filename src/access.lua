@@ -65,8 +65,8 @@ function _M.execute(conf)
     ak_tools:print(result_find, 'FIND_RESULT')
     ak_tools:print(err_find, 'FIND_ERR')
 
-    local result_find2, err_find2 = singletons.dao.tbl_ankama:find({
-        id = '599645c6-3a57-410c-a247-ce0071aa4fc3'
+    local result_find2, err_find2 = singletons.dao.tbl_ankama:find({ -- Uniquement sur une PRIMARY KEY
+        id = '5226a47b-2cc3-4797-a207-47fd814f343d'
     })
 
     ak_tools:print(result_find2, 'FIND_RESULT_2')
