@@ -58,10 +58,19 @@ function _M.execute(conf)
     ak_tools:print(result_insert, 'INSERT_RESULT')
     ak_tools:print(err_insert, 'INSERT_ERR')
 
-    local result_find, err_find = singletons.dao.tbl_ankama:find_all { consumer_id = '0c9d0a88-0e58-446a-b062-50082167de86' }
+    local result_find, err_find = singletons.dao.tbl_ankama:find_all({
+        consumer_id = '0c9d0a88-0e58-446a-b062-50082167de86'
+    })
 
     ak_tools:print(result_find, 'FIND_RESULT')
     ak_tools:print(err_find, 'FIND_ERR')
+
+    local result_find2, err_find2 = singletons.dao.tbl_ankama:find({
+        consumer_id = '0c9d0a88-0e58-446a-b062-50082167de86'
+    })
+
+    ak_tools:print(result_find2, 'FIND_RESULT_2')
+    ak_tools:print(err_find2, 'FIND_ERR_2')
 
     -- TEST CASSANDRA --------------------------------------------------------------------------------------------------
 
