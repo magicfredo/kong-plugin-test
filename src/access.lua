@@ -72,6 +72,11 @@ function _M.execute(conf)
     ak_tools:print(result_find2, 'FIND_RESULT_2')
     ak_tools:print(err_find2, 'FIND_ERR_2')
 
+    local apis_dao = singletons.dao.apis
+    ak_tools:print(apis_dao, 'APIS_DAO')
+
+
+
     -- TEST CASSANDRA --------------------------------------------------------------------------------------------------
 
     local authorization_type;
