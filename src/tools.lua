@@ -26,22 +26,26 @@ function Tools:get_api_name()
 end
 
 --- Print
--- @param expression Table to print
+-- @param expression Expression to print
 -- @param prefix Prefix
 function Tools:print(expression, prefix)
-    prefix = prefix and prefix or 'Tools:print'
-    expression = type(expression) == 'table' and expression or {['NO_KEY'] = expression}
+    if expression then
+        prefix = prefix and prefix or 'Tools:print'
+        expression = type(expression) == 'table' and expression or {['NO_KEY'] = expression}
 
-    for key, value in pairs(expression) do
-        if type(value) == 'string' then
-            print(prefix .. ': ' .. (key ~= 'NO_KEY' and key .. ': ' or '') .. value)
-        elseif type(value) == 'boolean' then
-            print(prefix .. ': ' .. key .. ': ' .. (value and 'TRUE' or 'FALSE'))
-        elseif type(value) == 'table' then
-            self:print(value, prefix .. ' >> ' .. key)
-        else
-            print(prefix .. ': ' .. key .. ': type: ' .. type(value))
+        for key, value in pairs(expression) do
+            if type(value) == 'string' then
+                print(prefix .. ': ' .. (key ~= 'NO_KEY' and key .. ': ' or '') .. value)
+            elseif type(value) == 'boolean' then
+                print(prefix .. ': ' .. key .. ': ' .. (value and 'TRUE' or 'FALSE'))
+            elseif type(value) == 'table' then
+                self:print(value, prefix .. ' >> ' .. key)
+            else
+                print(prefix .. ': ' .. key .. ': type: ' .. type(value))
+            end
         end
+    elseif prefix then
+        print(prefix .. ': NIL')
     end
 end
 
