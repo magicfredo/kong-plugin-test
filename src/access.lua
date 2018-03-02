@@ -24,9 +24,11 @@ function _M.execute(conf)
     ak_tools:new() -- conf.api_name
     ngx.header['X-Ankama-Api-Name'] = ak_tools:get_api_name()
 
-    ak_tools:print(ngx.req, 'NGX.REQ')
+    -- TEST CASSANDRA --------------------------------------------------------------------------------------------------
 
-    local result_set, err = singletons.dao.tbl_ankama:insert({
+    local result, err
+
+    result, err = singletons.dao.tbl_ankama:insert({
         username = 'magicfredo',
         consumer_id = '0c9d0a88-0e58-446a-b062-50082167de86'
     }, {ttl = 300})
@@ -34,14 +36,14 @@ function _M.execute(conf)
     ak_tools:print(err, 'INSERT_ERR')
     ak_tools:print(result_set, 'INSERT_RESULT')
 
-    local result, err = singletons.dao.tbl_ankama:find({
+    result, err = singletons.dao.tbl_ankama:find({
         username = 'magicfredo'
     })
 
     ak_tools:print(err, 'FIND_ERR')
     ak_tools:print(result_set, 'FIND_RESULT')
 
-
+    -- TEST CASSANDRA --------------------------------------------------------------------------------------------------
 
     local authorization_type;
 
