@@ -36,9 +36,7 @@ function _M.execute(conf)
     ak_tools:print(err, 'INSERT_ERR')
     ak_tools:print(result_set, 'INSERT_RESULT')
 
-    result, err = singletons.dao.tbl_ankama:find({
-        username = 'magicfredo'
-    })
+    result, err = singletons.dao.tbl_ankama:find { consumer_id = '0c9d0a88-0e58-446a-b062-50082167de86' }
 
     ak_tools:print(err, 'FIND_ERR')
     ak_tools:print(result_set, 'FIND_RESULT')
