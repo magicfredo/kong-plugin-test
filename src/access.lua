@@ -49,7 +49,9 @@ function _M.execute(conf)
     ngx.header['X-Ankama-Api-Name'] = ak_tools:get_api_name()
 
     ak_tools:print(ngx.var.remote_addr, 'REMOTE ADDR')
-    ak_tools:print(ngx.var, 'NGX VAR')
+
+    ngx.say("type: ", type(ngx.var.binary_remote_addr))
+    ak_tools:print(ngx.var.binary_remote_addr, 'BINARY REMOTE ADDR')
 
     -- TEST CASSANDRA --------------------------------------------------------------------------------------------------
 
