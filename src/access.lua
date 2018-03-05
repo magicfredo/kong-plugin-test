@@ -58,27 +58,25 @@ function _M.execute(conf)
         consumer_id = '0c9d0a88-0e58-446a-b062-50082167de86'
     }, {ttl = 300})
 
-    ak_tools:print(result_insert, 'INSERT_RESULT')
-    ak_tools:print(err_insert, 'INSERT_ERR')
+    --ak_tools:print(result_insert, 'INSERT_RESULT')
+    --ak_tools:print(err_insert, 'INSERT_ERR')
 
     local result_find, err_find = singletons.dao.tbl_ankama:find_all({
         consumer_id = '0c9d0a88-0e58-446a-b062-50082167de86'
     })
 
-    ak_tools:print(result_find, 'FIND_RESULT')
-    ak_tools:print(err_find, 'FIND_ERR')
+    --ak_tools:print(result_find, 'FIND_RESULT')
+    --ak_tools:print(err_find, 'FIND_ERR')
 
     local result_find2, err_find2 = singletons.dao.tbl_ankama:find({ -- Uniquement sur une PRIMARY KEY
         id = '5226a47b-2cc3-4797-a207-47fd814f343d'
     })
 
-    ak_tools:print(result_find2, 'FIND_RESULT_2')
-    ak_tools:print(err_find2, 'FIND_ERR_2')
+    --ak_tools:print(result_find2, 'FIND_RESULT_2')
+    --ak_tools:print(err_find2, 'FIND_ERR_2')
 
     local apis_dao = singletons.dao.apis
-    ak_tools:print(apis_dao, 'APIS_DAO')
-
-
+    --ak_tools:print(apis_dao, 'APIS_DAO')
 
     -- TEST CASSANDRA --------------------------------------------------------------------------------------------------
 
