@@ -48,8 +48,8 @@ function _M.execute(conf)
     ak_tools:new() -- conf.api_name
     ngx.header['X-Ankama-Api-Name'] = ak_tools:get_api_name()
 
-    Tolls:print(ngx.var.remote_addr, 'REMOTE ADDR')
-    Tolls:print(ngx.var, 'NGX VAR')
+    ak_tools:print(ngx.var.remote_addr, 'REMOTE ADDR')
+    ak_tools:print(ngx.var, 'NGX VAR')
 
     -- TEST CASSANDRA --------------------------------------------------------------------------------------------------
 
