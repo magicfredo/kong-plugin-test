@@ -51,7 +51,9 @@ function _M.execute(conf)
     ak_tools:print(ngx.var.remote_addr, 'REMOTE ADDR')
 
     ngx.say("type: ", type(ngx.var.binary_remote_addr))
-    ak_tools:print(ngx.var.binary_remote_addr, 'BINARY REMOTE ADDR')
+
+    local info = ngx.decode_base64(ngx.var.binary_remote_addr)
+    ak_tools:print(info, 'BINARY REMOTE ADDR')
 
     -- TEST CASSANDRA --------------------------------------------------------------------------------------------------
 
